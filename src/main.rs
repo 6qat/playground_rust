@@ -15,12 +15,18 @@ fn main() {
     let r = &v[1];
     assert_eq!(*r, 2);
 
-    static mut STASH: &i32 = &0;
+    static mut STASH: &i32 = &10;
 
-    fn f(p: &'static i32) {
+    fn func(p: &'static i32) {
         unsafe {
             STASH = p;
         }
 
     }
+
+    static WORTH_POINTING_AT: i32 = 1000;
+    func(&WORTH_POINTING_AT);
+    let us = unsafe { *STASH };
+    assert_eq!(us, 1000);
+
 }
