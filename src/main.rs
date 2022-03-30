@@ -1,32 +1,64 @@
+use mini_redis::{Connection, Frame};
 #[allow(unused_assignments)]
 #[allow(unused_variables)]
 #[allow(dead_code)]
+use tokio::net::{TcpListener, TcpStream};
 
-fn main() {
-    let r;
-    {
-        let x = 1;
-        r = &x;
-        assert_eq!(*r, 1);
+// https://tokio.rs/tokio/tutorial/spawning
+//
+// *** When we say that a value is 'static, all that means is that it
+// would not be incorrect to keep that value around forever.
+// This is important because the compiler is unable to reason about
+// how long a newly spawned task stays around, so the only way it can be
+// sure that the task doesn't live too long is to make sure it may live forever.
+
+#[tokio::main]
+async fn main() {
+    let listener = TcpListener::bind("127.0.0.1:6379").await.unwrap();
+    loop {
+        // The second item contains the IP and port of the new connection.
+        let (socket, _) = listener.accept().await.unwrap();
+        // A new task is spawned for each inbound socket. The socket is
+        // moved to the new task and processed there.
+        tokio::spawn(async move {
+            process(socket).await;
+        });
     }
-    //assert_eq!(*r, 1);
+}
 
-    let v = vec![1, 2, 3];
-    let r = &v[1];
-    assert_eq!(*r, 2);
+async fn process(socket: TcpStream) {
+    use mini_redis::Command::{self, Get, Set};
+    use std::collections::HashMap;
 
-    static mut STASH: &i32 = &10;
+    // A hashmap is used to store data
+    let mut db = HashMap::new();
 
-    fn func(p: &'static i32) {
-        unsafe {
-            STASH = p;
-        }
+    // The `Connection` lets us read/write redis **frames** instead of
+    // byte streams. The `Connection` type is defined by mini-redis.
+    let mut connection = Connection::new(socket);
+
+    while let Some(frame) = connection.read_frame().await.unwrap() {
+        println!("GOT: {:?}", frame);
+        let response = match Command::from_frame(frame).unwrap() {
+            Set(cmd) => {
+                db.insert(cmd.key().to_string(), cmd.value().to_vec());
+                Frame::Simple("OK".to_string())
+            }
+            Get(cmd) => {
+                if let Some(value) = db.get(cmd.key()) {
+                    // `Frame::Bulk` expects data to be of type `Bytes`. This
+                    // type will be covered later in the tutorial. For now,
+                    // `&Vec<u8>` is converted to `Bytes` using `into()`.
+                    Frame::Bulk(value.clone().into())
+                } else {
+                    Frame::Null
+                }
+            }
+            cmd => panic!("unimplemented {:?}", cmd),
+        };
+
+        // Write the response to the client
+        connection.write_frame(&response).await.unwrap();
 
     }
-
-    static WORTH_POINTING_AT: i32 = 1000;
-    func(&WORTH_POINTING_AT);
-    let us = unsafe { *STASH };
-    assert_eq!(us, 1000);
-
 }
