@@ -8,14 +8,14 @@ async fn main() {
     // oneshot: single-producer, single consumer channel. A single value can be sent.
     // broadcast: multi-producer, multi-consumer. Many values can be sent. Each receiver sees every value.
     // watch: single-producer, multi-consumer. Many values can be sent, but no history is kept. Receivers only see the most recent value.
-    let (tx, mut rx) = mpsc::channel(32);
-    let tx2 = tx.clone();
+    let (tx1, mut rx) = mpsc::channel(32);
+    let tx2 = tx1.clone();
 
     // tx.send("sending from first handle").await;
     // tx2.send("sending from second handle").await;
 
     tokio::spawn(async move {
-        tx.send("sending from first handle").await;
+        tx1.send("sending from first handle").await;
     });
 
     tokio::spawn(async move {
