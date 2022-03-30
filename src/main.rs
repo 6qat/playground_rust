@@ -9,6 +9,7 @@ use std::collections::HashMap;
 // std::sync::Mutex and not tokio::sync::Mutex
 // consider using parking_lot::Mutex as a faster alternative to std::sync::Mutex
 use std::sync::{Arc, Mutex};
+// use parking_lot::Mutex;
 
 type Db = Arc<Mutex<HashMap<String, Bytes>>>;
 

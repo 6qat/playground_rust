@@ -1,0 +1,29 @@
+If contention on a synchronous mutex becomes a problem, the best fix is
+rarely to switch to the Tokio mutex. Instead, options to consider are:
+
+- Switching to a dedicated task to manage state and use message passing.
+- Shard the mutex.
+- Restructure the code to avoid the mutex.
+
+type ShardedDb = Arc<Vec<Mutex<HashMap<String, Vec<u8>>>>>;
+
+fn new_sharded_db(num_shards: usize) -> ShardedDb {
+    let mut db = Vec::with_capacity(num_shards);
+    for _ in 0..num_shards {
+        db.push(Mutex::new(HashMap::new()));
+    }
+    Arc::new(db)
+}
+
+Then, finding the cell for any given key becomes a two step process. First, the key is
+used to identify which shard it is part of. Then, the key is looked up in the HashMap.
+
+let shard = db[hash(key) % db.len()].lock().unwrap();
+shard.insert(key, value);
+
+The simple implementation outlined above requires using a fixed number of shards,
+and the number of shards cannot be changed once the sharded map is created. The
+dashmap crate provides an implementation of a more sophisticated sharded hash map.
+
+
+

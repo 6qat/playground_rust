@@ -8,5 +8,9 @@ edition = "2021"
 [dependencies]
 tokio = { version = "1", features = ["full"] }
 mini-redis = "0.4"
-rand = "0.8.5"
 bytes = "1"
+
+# Not used yet
+rand = "0.8.5"
+parking_lot = "0.12.0"
+dashmap = "5.2.0"
