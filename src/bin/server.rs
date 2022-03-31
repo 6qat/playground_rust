@@ -1,14 +1,15 @@
+use std::collections::HashMap;
+// std::sync::Mutex and not tokio::sync::Mutex
+// consider using parking_lot::Mutex as a faster alternative to std::sync::Mutex
+use std::sync::{Arc, Mutex};
+
+use bytes::Bytes;
 #[allow(unused_assignments)]
 #[allow(unused_variables)]
 #[allow(dead_code)]
 use mini_redis::{Connection, Frame};
 use tokio::net::{TcpListener, TcpStream};
-use bytes::Bytes;
-use std::collections::HashMap;
 
-// std::sync::Mutex and not tokio::sync::Mutex
-// consider using parking_lot::Mutex as a faster alternative to std::sync::Mutex
-use std::sync::{Arc, Mutex};
 // use parking_lot::Mutex;
 
 type Db = Arc<Mutex<HashMap<String, Bytes>>>;
@@ -77,3 +78,4 @@ async fn process(socket: TcpStream, db: Db) {
         connection.write_frame(&response).await.unwrap();
     }
 }
+

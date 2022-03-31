@@ -2,6 +2,7 @@ use bytes::Bytes;
 use mini_redis::client;
 use tokio::sync::{mpsc, oneshot};
 
+// https://tokio.rs/tokio/tutorial/channels
 /// Multiple different commands are multiplexed over a single channel.
 #[derive(Debug)]
 enum Command {
@@ -22,9 +23,9 @@ type Responder<T> = oneshot::Sender<mini_redis::Result<T>>;
 
 #[tokio::main]
 async fn main() {
-    let (tx, mut rx) = mpsc::channel(32);
+    let (tx1, mut rx) = mpsc::channel(32);
     // Clone a `tx` handle for the second f
-    let tx2 = tx.clone();
+    let tx2 = tx1.clone();
 
     let manager = tokio::spawn(async move {
         // Open a connection to the mini-redis address.
@@ -56,7 +57,7 @@ async fn main() {
         };
 
         // Send the GET request
-        if tx.send(cmd).await.is_err() {
+        if tx1.send(cmd).await.is_err() {
             eprintln!("connection task shutdown");
             return;
         }
