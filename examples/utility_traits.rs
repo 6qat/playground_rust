@@ -15,11 +15,13 @@ impl Drop for Appellation {
 }
 
 fn main() {
+    let _a0: Appellation;
     {
         let _a1 = Appellation {
             name: "Guiga".to_string(),
             nicknames: vec!["a".to_string(), "b".to_string()],
         };
+        //_a0 = _a1;
     }
 
     let _a1 = Appellation {
@@ -27,7 +29,7 @@ fn main() {
         nicknames: vec!["c".to_string(), "d".to_string()],
     };
 
-    //drop(_a1);
+    drop(_a1);
 
     println!("Before the program ends.")
 }
