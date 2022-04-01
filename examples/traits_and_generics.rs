@@ -11,14 +11,17 @@ fn _say_hello(out: &mut dyn Write) -> Result<()> {
     //     f@std::fs::File{inner} => {},
     //     _ => {}
     // }
+    //let o: Result<File> = out.try_into();
     out.write_all(b"hello world\n")?;
     out.flush()
+
 }
 
 fn _say_hello2<W: 'static + Write>(_out: &mut W) -> Result<()> {
     if TypeId::of::<W>() == TypeId::of::<File>() {
         println!("File");
     }
+
     // match _out {
     //     &mut File{inner} => { },
     //     _ => {},
