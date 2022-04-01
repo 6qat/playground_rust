@@ -27,7 +27,7 @@ fn main() {
         nicknames: vec!["c".to_string(), "d".to_string()],
     };
 
-    drop(_a1);
+    //drop(_a1);
 
     println!("Before the program ends.")
 }
