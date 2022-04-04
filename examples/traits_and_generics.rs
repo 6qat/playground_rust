@@ -22,6 +22,15 @@ fn _say_hello2<W: 'static + Write>(_out: &mut W) -> Result<()> {
         println!("File");
     }
 
+    // match &_out {
+    //     File => {
+    //         println!("File");
+    //     }
+    //     _ => {
+    //
+    //     }
+    // }
+
     // match _out {
     //     &mut File{inner} => { },
     //     _ => {},
