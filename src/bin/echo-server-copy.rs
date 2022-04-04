@@ -1,4 +1,6 @@
+use bytes::Bytes;
 use bytes::BytesMut;
+use mini_redis::Result;
 use tokio::io::{self, AsyncReadExt, AsyncWriteExt};
 use tokio::net::TcpListener;
 use tokio::net::TcpStream;
@@ -37,6 +39,15 @@ async fn main() -> io::Result<()> {
     }
 }
 
+enum Frame {
+    Simple(String),
+    Error(String),
+    Integer(u64),
+    Bulk(Bytes),
+    Null,
+    Array(Vec<Frame>),
+}
+
 pub struct Connection {
     stream: TcpStream,
     buffer: BytesMut,
@@ -50,4 +61,5 @@ impl Connection {
             buffer: BytesMut::with_capacity(4096),
         }
     }
+
 }

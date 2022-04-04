@@ -9,6 +9,7 @@ edition = "2021"
 tokio = { version = "1", features = ["full"] }
 mini-redis = "0.4"
 bytes = "1"
+message-io = "0.14"
 
 # Not used yet
 rand = "0.8.5"
