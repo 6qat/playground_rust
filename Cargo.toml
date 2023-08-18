@@ -7,7 +7,7 @@ edition = "2021"
 
 [workspace]
 members = [
-    "lab", "tokio-lab",
+    "lab", "tokio-lab", "rust-servers-book",
 ]
 # Not used yet
 #rand = "0.8.5"
