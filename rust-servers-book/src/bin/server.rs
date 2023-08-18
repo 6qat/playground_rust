@@ -13,5 +13,4 @@ fn main() {
         stream.read(&mut buffer).unwrap();
         stream.write(&mut buffer).unwrap();
     }
-
 }
