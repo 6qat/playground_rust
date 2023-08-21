@@ -60,6 +60,7 @@ mod tests {
         pool.execute(foo); // foo implements Copy trait, so no need to clone() it here
         pool.execute(foo);
         pool.execute(foo);
-        std::thread::sleep(std::time::Duration::from_secs(2));
+        pool.execute(foo);
+        std::thread::sleep(std::time::Duration::from_secs(3));
     }
 }
