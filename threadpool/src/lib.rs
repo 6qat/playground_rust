@@ -6,6 +6,7 @@ use std::sync::{mpsc, Arc};
 
 pub struct ThreadPool {
     _handles: Vec<std::thread::JoinHandle<()>>,
+    _sender: mpsc::Sender<Box<dyn Fn() + Send>>,
 }
 
 impl ThreadPool {
@@ -22,22 +23,29 @@ impl ThreadPool {
         //     })
         //     .collect();
 
+        // Study: std::borrow::Cow https://doc.rust-lang.org/std/borrow/enum.Cow.html
+
         let receiver = Arc::new(receiver);
         let mut handles = Vec::new();
         for _ in 0..num_threads {
             let clone = receiver.clone();
             let handle = std::thread::spawn(move || loop {
                 let work = clone.lock().unwrap().recv().unwrap();
+                println!("Thread {:?} got work", std::thread::current().id());
                 work();
+                println!("Thread {:?} finished work", std::thread::current().id());
             });
             handles.push(handle);
         }
 
-        Self { _handles: handles }
+        Self {
+            _handles: handles,
+            _sender: sender,
+        }
     }
 
-    pub fn execute<T: Fn()>(&self, work: T) {
-        work();
+    pub fn execute<T: Fn() + Send + 'static>(&self, work: T) {
+        self._sender.send(Box::new(work)).unwrap();
     }
 }
 
@@ -48,9 +56,10 @@ mod tests {
     #[test]
     fn it_works() {
         let pool = ThreadPool::new(4);
-        pool.execute(|| {
-            println!("Hello from thread pool");
-            println!("Hello from thread pool");
-        });
+        let foo = || std::thread::sleep(std::time::Duration::from_secs(1));
+        pool.execute(foo); // foo implements Copy trait, so no need to clone() it here
+        pool.execute(foo);
+        pool.execute(foo);
+        std::thread::sleep(std::time::Duration::from_secs(2));
     }
 }
