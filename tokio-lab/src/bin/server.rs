@@ -1,12 +1,11 @@
+#![allow(unused_assignments, dead_code, unused_variables)]
+
 use std::collections::HashMap;
 // std::sync::Mutex and not tokio::sync::Mutex
 // consider using parking_lot::Mutex as a faster alternative to std::sync::Mutex
 use std::sync::{Arc, Mutex};
 
 use bytes::Bytes;
-#[allow(unused_assignments)]
-#[allow(unused_variables)]
-#[allow(dead_code)]
 use mini_redis::{Connection, Frame};
 use tokio::net::{TcpListener, TcpStream};
 
@@ -49,33 +48,31 @@ async fn process(socket: TcpStream, db: Db) {
     while let Some(frame) = connection.read_frame().await.unwrap() {
         println!("GOT: {:?}", frame);
 
-        let response =
-            match Command::from_frame(frame).unwrap() {
-                Set(cmd) => {
-                    let mut db = db.lock().unwrap();
-                    db.insert(cmd.key().to_string(), cmd.value().clone());
-                    Frame::Simple("OK".to_string())
-                }
+        let response = match Command::from_frame(frame).unwrap() {
+            Set(cmd) => {
+                let mut db = db.lock().unwrap();
+                db.insert(cmd.key().to_string(), cmd.value().clone());
+                Frame::Simple("OK".to_string())
+            }
 
-                Get(cmd) => {
-                    let db = db.lock().unwrap();
-                    if let Some(value) = db.get(cmd.key()) {
-                        // `Frame::Bulk` expects data to be of type `Bytes`. This
-                        // type will be covered later in the tutorial. For now,
-                        // `&Vec<u8>` is converted to `Bytes` using `into()`.
-                        Frame::Bulk(value.clone())
-                    } else {
-                        Frame::Null
-                    }
+            Get(cmd) => {
+                let db = db.lock().unwrap();
+                if let Some(value) = db.get(cmd.key()) {
+                    // `Frame::Bulk` expects data to be of type `Bytes`. This
+                    // type will be covered later in the tutorial. For now,
+                    // `&Vec<u8>` is converted to `Bytes` using `into()`.
+                    Frame::Bulk(value.clone())
+                } else {
+                    Frame::Null
                 }
+            }
 
-                cmd => {
-                    panic!("unimplemented {:?}", cmd)
-                }
-            };
+            cmd => {
+                panic!("unimplemented {:?}", cmd)
+            }
+        };
 
         // Write the response to the client
         connection.write_frame(&response).await.unwrap();
     }
 }
-

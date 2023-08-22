@@ -63,5 +63,4 @@ impl Connection {
             buffer: BytesMut::with_capacity(4096),
         }
     }
-
 }
