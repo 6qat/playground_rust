@@ -10,7 +10,10 @@ use prog_rust_book::{FromClient, FromServer};
 
 use crate::group_table::GroupTable;
 
-pub async fn serve(socket: TcpStream, groups: Arc<GroupTable>) -> ChatResult<()> {
+pub async fn serve(
+    socket: TcpStream,
+    groups: Arc<GroupTable>,
+) -> ChatResult<()> {
     let outbound = Arc::new(Outbound::new(socket.clone()));
 
     let buffered = BufReader::new(socket);

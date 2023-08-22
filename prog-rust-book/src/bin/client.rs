@@ -5,9 +5,9 @@ use async_std::net;
 use async_std::prelude::*;
 use async_std::task;
 
-use prog_rust_book::utils::{self, ChatResult};
 use prog_rust_book::FromClient;
 use prog_rust_book::FromServer;
+use prog_rust_book::utils::{self, ChatResult};
 
 async fn send_commands(mut to_server: net::TcpStream) -> ChatResult<()> {
     println!(

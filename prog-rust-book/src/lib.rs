@@ -1,7 +1,9 @@
 #![warn(rust_2018_idioms)]
 #![allow(elided_lifetimes_in_paths)]
-use serde::{Deserialize, Serialize};
+
 use std::sync::Arc;
+
+use serde::{Deserialize, Serialize};
 
 pub mod utils;
 

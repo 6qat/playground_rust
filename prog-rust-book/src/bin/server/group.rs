@@ -48,9 +48,10 @@ async fn handle_subscriber(
                 message: message.clone(),
             },
 
-            Err(RecvError::Lagged(n)) => {
-                FromServer::Error(format!("Dropped {} messages from {}.", n, group_name))
-            }
+            Err(RecvError::Lagged(n)) => FromServer::Error(format!(
+                "Dropped {} messages from {}.",
+                n, group_name
+            )),
 
             Err(RecvError::Closed) => break,
         };
