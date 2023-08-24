@@ -33,3 +33,9 @@ Package suggestions:
 - crossbeam (https://github.com/crossbeam-rs/crossbeam): This crate provides a set of tools for concurrent programming
 - dashmap ()
 - async_std (): tokio alternative
+
+Error handling libs:
+- this-error
+- anyhow (forked into eyre)
+
+
