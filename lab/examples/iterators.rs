@@ -1,4 +1,6 @@
 #![allow(unused_assignments, dead_code, unused_variables)]
+
+// https://www.youtube.com/watch?v=4GcKrj4By8k&list=PLai5B987bZ9CoVR-QEIN9foz4QCJ0H2Y8&index=20
 fn main() {
     let a = [55, 66, 77];
     let mut v1 = vec![55, 66, 77, 99];
@@ -13,11 +15,13 @@ fn main() {
         println!("->> i: {}", i);
     }
 
-    let v_iter_mut = v1.iter_mut(); // The variable itself is NOT immutable.
+    // The iterator itself is NOT immutable, but the vector it points to is.
+    let v_iter_mut = v1.iter_mut();
     for i in v_iter_mut {
         println!("->> mut i: {}", i);
     }
 
+    // Steals the ownership of the values from v1.
     let v_iter_owned = v1.into_iter();
     for i in v_iter_owned {
         println!("->> owned i: {}", i);
@@ -31,7 +35,10 @@ fn main() {
 #[test]
 fn iterator_demonstration() {
     let v = vec![1, 2, 3];
-    let mut v_iter = v.iter(); // NEEDS TO BE MUTABLE!!!! (look above comment for iter_mut())
+
+    // NEEDS TO BE MUTABLE!!!! (look above comment for iter_mut())
+    let mut v_iter = v.iter();
+
     assert_eq!(v_iter.next(), Some(&1));
     assert_eq!(v_iter.next(), Some(&2));
     assert_eq!(v_iter.next(), Some(&3));
