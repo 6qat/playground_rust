@@ -1,4 +1,3 @@
-
 #[allow(unused)]
 mod front_of_house {
     pub mod hosting {
@@ -21,9 +20,7 @@ pub fn eat_at_restaurant() {
     front_of_house::hosting::add_to_waitlist(); // relative path
 }
 
-fn serve_order() {
-
-}
+fn serve_order() {}
 
 #[allow(unused)]
 mod back_of_house {
