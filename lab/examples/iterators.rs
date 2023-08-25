@@ -132,3 +132,51 @@ fn filters_by_size() {
         ]
     );
 }
+
+struct Counter {
+    count: u32,
+}
+
+impl Counter {
+    fn new() -> Counter {
+        Counter { count: 0 }
+    }
+}
+
+impl Iterator for Counter {
+    type Item = u32; // Associated type.
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.count < 5 {
+            self.count += 1;
+            Some(self.count)
+            // Some(self.count + 1)
+        } else {
+            None
+        }
+    }
+}
+
+#[test]
+fn calling_next_directly() {
+    let mut counter = Counter::new();
+
+    // The next() method is defined by the Iterator trait.
+    assert_eq!(counter.next(), Some(1));
+    assert_eq!(counter.next(), Some(2));
+    assert_eq!(counter.next(), Some(3));
+    assert_eq!(counter.next(), Some(4));
+    assert_eq!(counter.next(), Some(5));
+    assert_eq!(counter.next(), None);
+}
+
+#[test]
+fn using_other_iterator_trait_methods() {
+    let sum = Counter::new()
+        .skip(1)
+        .zip(Counter::new())
+        .map(|(a, b)| a * b)
+        .filter(|x| x % 3 == 0)
+        .sum::<u32>();
+
+    assert_eq!(18, sum);
+}

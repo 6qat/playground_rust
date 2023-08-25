@@ -2,7 +2,7 @@ use std::fmt;
 
 // this extern block links to the libm library
 #[link(name = "m")]
-extern {
+extern "C" {
     // this is a foreign function
     // that computes the square root of a single precision complex number
     fn csqrtf(z: Complex) -> Complex;
