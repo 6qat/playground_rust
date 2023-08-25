@@ -13,7 +13,7 @@ fn main() {
         println!("->> i: {}", i);
     }
 
-    let v_iter_mut = v1.iter_mut();
+    let v_iter_mut = v1.iter_mut(); // The variable itself is NOT immutable.
     for i in v_iter_mut {
         println!("->> mut i: {}", i);
     }
@@ -31,7 +31,7 @@ fn main() {
 #[test]
 fn iterator_demonstration() {
     let v = vec![1, 2, 3];
-    let mut v_iter = v.iter(); // NEEDS TO BE MUTABLE!!!!
+    let mut v_iter = v.iter(); // NEEDS TO BE MUTABLE!!!! (look above comment for iter_mut())
     assert_eq!(v_iter.next(), Some(&1));
     assert_eq!(v_iter.next(), Some(&2));
     assert_eq!(v_iter.next(), Some(&3));
