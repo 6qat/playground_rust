@@ -1,7 +1,4 @@
-#[allow(unused_assignments)]
-#[allow(unused_variables)]
-#[allow(dead_code)]
-
+#[allow(unused_assignments, unused_variables, dead_code)]
 #[derive(Debug)]
 struct Appellation {
     name: String,

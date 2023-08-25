@@ -1,7 +1,7 @@
 use std::any::TypeId;
-use std::io::Write;
 use std::fs::File;
 use std::io::Result;
+use std::io::Write;
 
 fn _say_hello(out: &mut dyn Write) -> Result<()> {
     // if TypeId::of::<*mut dyn Write>() == TypeId::of::<File>() {
@@ -14,7 +14,6 @@ fn _say_hello(out: &mut dyn Write) -> Result<()> {
     //let o: Result<File> = out.try_into();
     out.write_all(b"hello world\n")?;
     out.flush()
-
 }
 
 fn _say_hello2<W: 'static + Write>(_out: &mut W) -> Result<()> {

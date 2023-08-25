@@ -1,6 +1,7 @@
+use random_info::RandomInfo;
+
 mod random_info;
 
-use random_info::RandomInfo;
 // use crate::random_info::RandomInfo;
 
 #[allow(dead_code)]
