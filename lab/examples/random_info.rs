@@ -16,5 +16,12 @@ impl RandomInfo {
     }
 }
 
+// https://rust-lang.github.io/rust-clippy/master/index.html#/new_without_default
+impl Default for RandomInfo {
+    fn default() -> Self {
+        RandomInfo::new()
+    }
+}
+
 #[allow(dead_code)]
 fn main() {}
