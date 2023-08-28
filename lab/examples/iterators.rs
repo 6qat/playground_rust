@@ -1,5 +1,7 @@
 #![allow(unused_assignments, dead_code, unused_variables)]
 
+use std::fmt::Display;
+
 // https://www.youtube.com/watch?v=4GcKrj4By8k&list=PLai5B987bZ9CoVR-QEIN9foz4QCJ0H2Y8&index=20
 fn main() {
     let a = [55, 66, 77];
@@ -27,7 +29,61 @@ fn main() {
         println!("->> owned i: {}", i);
     }
 
+    #[derive(Debug)]
+    struct Number {
+        value: i32,
+    }
+
+    impl Display for Number {
+        fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+            write!(f, "Number: {}", self.value)
+        }
+    }
+
+    let a = vec![
+        Number { value: 55 },
+        Number { value: 66 },
+        Number { value: 77 },
+    ];
+
+    // into_iter() under the hood.
+    for i in a {
+        println!("->> i: {}", i);
+    }
+    // println!("{:?}", a);
+    // let _ = a.iter();
     // let _ = v1.iter();
+
+    use std::collections::VecDeque;
+
+    let vec = [1, 2, 3, 4];
+    let buf = vec.into_iter().collect::<VecDeque<_>>();
+    // let _ = vec.iter();
+
+    let mut vec1 = vec![1, 2, 3, 4];
+    let vec2 = vec![10, 20, 30, 40];
+    vec1.extend(vec2);
+
+    let vec = vec![1, 2, 3];
+    for x in vec.iter().rev() {
+        println!("vec contained {x:?}");
+    }
+
+    use std::collections::btree_map::BTreeMap;
+
+    let mut count = BTreeMap::new();
+    let message = "she sells sea shells by the sea shore";
+
+    for c in message.chars() {
+        *count.entry(c).or_insert(0) += 1;
+    }
+
+    assert_eq!(count.get(&'s'), Some(&8));
+
+    println!("Number of occurrences of each character");
+    for (char, count) in &count {
+        println!("{char}: {count}");
+    }
 }
 
 #[test]
