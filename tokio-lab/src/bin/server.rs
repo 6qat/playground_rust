@@ -38,7 +38,10 @@ async fn main() {
     }
 }
 
-async fn process(socket: TcpStream, db: Db) {
+async fn process(
+    socket: TcpStream,
+    db: Db,
+) {
     use mini_redis::Command::{self, Get, Set};
 
     // The `Connection` lets us read/write redis **frames** instead of

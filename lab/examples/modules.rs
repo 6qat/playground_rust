@@ -11,7 +11,10 @@ struct MyData {
 }
 
 impl RandomInfo {
-    pub fn is_larger(&self, compare_to: i32) -> bool {
+    pub fn is_larger(
+        &self,
+        compare_to: i32,
+    ) -> bool {
         self.id > compare_to
     }
 }

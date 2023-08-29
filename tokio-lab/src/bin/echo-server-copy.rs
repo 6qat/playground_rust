@@ -27,12 +27,12 @@ async fn main() -> io::Result<()> {
                             // do here so just stop processing.
                             return;
                         }
-                    }
+                    },
                     Err(_) => {
                         // Unexpected socket error. There isn't much we can do
                         // here so just stop processing.
                         return;
-                    }
+                    },
                 }
             }
         });

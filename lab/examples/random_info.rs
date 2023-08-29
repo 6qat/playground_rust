@@ -11,7 +11,10 @@ impl RandomInfo {
             id: 0,
         }
     }
-    pub fn is_smaller(&self, compare_to: i32) -> bool {
+    pub fn is_smaller(
+        &self,
+        compare_to: i32,
+    ) -> bool {
         self.id < compare_to
     }
 }

@@ -33,7 +33,7 @@ async fn _test_write() -> io::Result<()> {
     Ok(())
 }
 
-async fn _test_write_all()  -> io::Result<()> {
+async fn _test_write_all() -> io::Result<()> {
     let mut file = File::create("foo.txt").await?;
 
     file.write_all(b"some bytes").await?;

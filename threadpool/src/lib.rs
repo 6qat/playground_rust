@@ -31,9 +31,15 @@ impl ThreadPool {
             let clone = receiver.clone();
             let handle = std::thread::spawn(move || loop {
                 let work = clone.lock().unwrap().recv().unwrap();
-                println!("Thread {:?} got work", std::thread::current().id());
+                println!(
+                    "Thread {:?} got work",
+                    std::thread::current().id()
+                );
                 work();
-                println!("Thread {:?} finished work", std::thread::current().id());
+                println!(
+                    "Thread {:?} finished work",
+                    std::thread::current().id()
+                );
             });
             handles.push(handle);
         }
@@ -44,7 +50,10 @@ impl ThreadPool {
         }
     }
 
-    pub fn execute<T: Fn() + Send + 'static>(&self, work: T) {
+    pub fn execute<T: Fn() + Send + 'static>(
+        &self,
+        work: T,
+    ) {
         self._sender.send(Box::new(work)).unwrap();
     }
 }
