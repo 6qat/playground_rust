@@ -7,7 +7,8 @@ edition = "2021"
 
 [workspace]
 members = [
-    "threadpool", "lab", "tokio-lab", "rust-servers-book", "prog-rust-book", "async-rust-book", "actix-lab", "axum-lab"
+    "threadpool", "lab", "tokio-lab", "rust-servers-book", "prog-rust-book",
+    "async-rust-book", "actix-lab", "axum-lab", "template"
 ]
 # Not used yet
 #rand = "0.8.5"
