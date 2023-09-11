@@ -1,6 +1,6 @@
 #![allow(unused, dead_code, unused_variables)]
 
-use std::iter::once;
+use std::iter::{once, zip};
 
 use itertools::{
     all, any, assert_equal, chain, cloned, concat, enumerate, fold,
@@ -190,4 +190,58 @@ fn test_repeat_call() {
     }
 
     assert_equal(repeat_call(|| 1).take(5), vec![1, 1, 1, 1, 1]);
+}
+
+#[test]
+fn test_unfold() {
+    use itertools::unfold;
+
+    // let mut state = 0;
+    let mut fibonacci = unfold((0, 1), |(a, b)| {
+        *a = *a + *b;
+        std::mem::swap(a, b);
+        Some(*b)
+    });
+
+    assert_eq!(fibonacci.next(), Some(1));
+    assert_eq!(fibonacci.next(), Some(2));
+    assert_eq!(fibonacci.next(), Some(3));
+    assert_eq!(fibonacci.next(), Some(5));
+    assert_eq!(fibonacci.next(), Some(8));
+
+    let mut fibonacci = unfold((1u32, 1u32), |(x1, x2)| {
+        // Attempt to get the next Fibonacci number
+        let next = x1.saturating_add(*x2);
+
+        // Shift left: ret <- x1 <- x2 <- next
+        let ret = *x1;
+        *x1 = *x2;
+        *x2 = next;
+
+        // If addition has saturated at the maximum, we are finished
+        if ret == *x1 && ret > 1 {
+            None
+        } else {
+            Some(ret)
+        }
+    });
+
+    assert_equal(
+        fibonacci.by_ref().take(8),
+        vec![1, 1, 2, 3, 5, 8, 13, 21],
+    );
+    assert_eq!(fibonacci.last(), Some(2_971_215_073))
+}
+
+#[test]
+fn test_zip() {
+    // use itertools::zip;
+    use std::iter::zip;
+
+    let mut result: Vec<(i32, char)> = Vec::new();
+
+    for (a, b) in zip(&[1, 2, 3, 4, 5], &['a', 'b', 'c']) {
+        result.push((*a, *b));
+    }
+    assert_eq!(result, vec![(1, 'a'), (2, 'b'), (3, 'c')]);
 }
