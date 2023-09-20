@@ -7,7 +7,7 @@ edition = "2021"
 
 [dependencies]
 tokio = { version = "1", features = ["full"] }
-message-io = "0.17.0"
+message-io = "0.18.0"
 mini-redis = "0.4.1"
 futures = "0.3.17"
 itertools = "0.11.0"
