@@ -23,7 +23,7 @@ fn main() {
         blood_alcohol: f32,
     }
 
-    // All the orders made to the bar, by client ID.
+    // All the orders made to the bar, by client ID.\
     let orders = vec![1, 2, 1, 2, 3, 4, 1, 2, 2, 3, 4, 1, 1, 1];
 
     // Our clients.
