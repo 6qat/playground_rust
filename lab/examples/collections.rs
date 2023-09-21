@@ -7,8 +7,7 @@ fn main() {
     let message = "she sells sea shells by the sea shore";
 
     // SIMPLY A FANTASTIC API !!!
-    for c in message.chars() {
-        *count.entry(c).or_insert(0) += 1;
+    for c in message.chars() { *count.entry(c).or_insert(0) += 1;
     }
 
     assert_eq!(count.get(&'s'), Some(&8));
